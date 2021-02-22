@@ -1,6 +1,47 @@
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 public class Main {
 
     public static void main(String[] args) {
+        displayBaseMenu();
+        Scanner input = new Scanner(System.in);
+
+        // get menu choice
+        char choice = 0;
+        boolean choiceFound = false;
+        while(!choiceFound){
+            try{
+                String in = input.next();
+                if (in.length() > 1) throw new InputMismatchException();
+                choice = in.charAt(0);
+                if (choice < '1' || choice > '6') throw new InputMismatchException();
+                choiceFound = true;
+            } catch (InputMismatchException e){
+                System.out.println("Please enter a valid number (1-6)");
+            }
+        }
+
+        switch(choice){
+            case 1:
+                searchSongMenu(input);
+                break;
+            case 2:
+                insertSongMenu(input);
+                break;
+            case 3:
+                addSampleMenu(input);
+                break;
+            case 4:
+                deleteSongMenu(input);
+                break;
+            case 5:
+                getSongsByLengthMenu(input);
+                break;
+            case 6:
+                findSamplesByArtistMenu(input);
+                break;
+        }
 	    // display choices:
         /*
            1. Search for song
@@ -37,5 +78,49 @@ public class Main {
                 - execute query
                 - display results
          */
+    }
+
+    static void displayBaseMenu(){
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("Enter a choice:\n")
+            .append("1: Search a song\n")
+            .append("2: Insert new song\n")
+            .append("3: Add sample to song\n")
+            .append("4. Delete song\n")
+            .append("5. Get songs longer than specified length\n")
+            .append("6. Find samples used by a specified artist\n");
+
+        System.out.println(builder.toString());
+    }
+
+    // TODO: Implement
+    static void searchSongMenu(Scanner input){
+
+    }
+
+    // TODO: Implement
+    static void insertSongMenu(Scanner input){
+
+    }
+
+    // TODO: Implement
+    static void addSampleMenu(Scanner input){
+
+    }
+
+    // TODO: Implement
+    static void deleteSongMenu(Scanner input){
+
+    }
+
+    // TODO: Implement
+    static void getSongsByLengthMenu(Scanner input){
+
+    }
+
+    // TODO: Implement
+    static void findSamplesByArtistMenu(Scanner input){
+
     }
 }
