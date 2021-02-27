@@ -7,7 +7,7 @@ public class DatabaseConnection {
 			//Class.forName("com.mysql.jdbc.Driver");
 			
 			//PLEASE USE YOUR URL HERE, YOUR USER, YOU PASSWORD
-			connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_beats", "root", "rootSER322HW");		
+			connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_beats", "root", "WaltDisney0721!");
         } catch (Exception error) {
             error.printStackTrace();
         }
