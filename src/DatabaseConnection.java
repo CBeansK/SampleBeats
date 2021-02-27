@@ -18,7 +18,7 @@ public class DatabaseConnection {
 		try {
             connect.close();
         } catch (Exception error) {
-        	System.out.println("DATABASE RESOURSE DID NOT CLOSE: LEAKED CONNECTION");
+        	System.out.println("DATABASE RESOURCE DID NOT CLOSE: LEAKED CONNECTION");
         }
 	}
 }
