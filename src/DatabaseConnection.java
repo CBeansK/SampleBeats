@@ -4,11 +4,14 @@ public class DatabaseConnection {
 		Connection connect = null;
 		try {
 			//PLEASE USER A DIFFERENT JDBC DRIVER IF NEEDED.
-			//Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			
 			//PLEASE USE YOUR URL HERE, YOUR USER, YOU PASSWORD
-			connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_beats", "root", "rootSER322HW");		
+			//TODO: Change pw back when committing
+			connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_beats", "root", "Sykes1337");
         } catch (Exception error) {
+			System.out.println("FAILED TO CONNECT TO SERVER");
+			System.out.println("ENSURE SERVER IS RUNNING AND CONFIGURATION IS CORRECT");
             error.printStackTrace();
         }
 		return connect;
