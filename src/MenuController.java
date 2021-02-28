@@ -168,7 +168,8 @@ public class MenuController {
 					String albumName = input.nextLine();
 					// get num_songs
 					System.out.println("Enter number of songs:");
-					String numSongs = input.nextLine();
+					int numSongs = input.nextInt();
+					input.nextLine();
 					// get artist
 					System.out.println("Enter the artist:");
 					String artistName = input.nextLine();
@@ -185,29 +186,55 @@ public class MenuController {
 					try {
 						ResultSet rs = album.getAlbumByName(title);
 						if (!rs.isBeforeFirst()){
-							System.out.println("Song not found.");
+							// send back to menu if no results found
+							System.out.println("Album not found.");
 							albumMenu();
 						} else {
+							// display data
 							album.displayAlbumData(rs);
+
+							// ask for new data
 							System.out.println("Enter new name for album or leave blank if no change");
 							String albumName = input.nextLine();
+
 							System.out.println("Enter new number of songs or leave blank if no change");
-							String numSongs = input.nextLine();
+							int numSongs = -1;
+							numSongs = input.nextInt();
+							// reset buffer
+							input.nextLine();
+
 							System.out.println("Enter new artist or leave blank if no change");
 							String artist = input.nextLine();
-							if (!albumName.trim().equals("")) album.updateAlbumName(albumName);
-							if (!numSongs.trim().equals("")) album.updateAlbumSongs(numSongs);
-							if (!artist.trim().equals("")) album.updateAlbumArtist(artist);
+
+							// update data
+							if (!albumName.trim().equals("")) album.updateAlbumName(title, albumName);
+							if ((numSongs > 0)) album.updateAlbumSongs(title, numSongs);
+							if (!artist.trim().equals("")) album.updateAlbumArtist(title, artist);
+
+							// done
 							albumMenu();
 						}
+						rs.close();
 					} catch (SQLException e){
 						System.out.println("Error while trying to make query.");
 						e.printStackTrace();
 					}
 				} else if (choice == '5') {
+					// get name
 					System.out.println("Enter album name:");
 					String name = input.nextLine();
-					album.removeAlbum(name);
+
+					// display search results
+					album.displayAlbumData(album.getAlbumByName(name));
+
+					// get name of artist to ensure we don't delete multiple albums
+					System.out.println("Enter name of artist:");
+					String artistName = input.nextLine();
+
+					// remove specified album
+					album.removeAlbum(name, artistName);
+
+					// done
 					albumMenu();
 				} else if (choice == '0') {
 					mainMenu();

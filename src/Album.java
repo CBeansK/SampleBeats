@@ -47,49 +47,165 @@ public class Album {
 		return null;
 	}
 
-	protected void insertAlbum(String name, String num_songs, String artist_id) {
+	protected void insertAlbum(String name, int num_songs, String artistName) {
 		//SQL QUERIES NEEDS THESE OBJ
 		DatabaseConnection DBC = new DatabaseConnection();
 		Connection connect = DBC.openDBConnection();
 
-		// get name
-		// get number of songs
-		// get artist
-		// if artist not found: offer to add artist
+		int artist_id = 0;
 
+
+		artist_id = getArtistId(artistName);
+		// return if artist not found
+		// TODO:  if artist not found: offer to add artist
+		if (artist_id == 0){
+			System.out.println("Artist not found.");
+			return;
+		}
+
+
+		String query = String.format("INSERT INTO album (name, num_Songs, artist_id) VALUES ('%s', %d, %d)", name, num_songs, artist_id);
+		try {
+			PreparedStatement stmt = connect.prepareStatement(query);
+			int res = stmt.executeUpdate();
+
+			if (res == 0) throw new SQLException();
+			else System.out.println("Added new album successfully.");
+
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		//TO DO (SQL QUERY CODES GOES HERE)
 		
 		DBC.closeDBConnection(connect);
 	}
 
-	protected void updateAlbumName(String albumName) {
+	protected void updateAlbumName(String originalName, String albumName) {
 		//SQL QUERIES NEEDS THESE OBJ
 		DatabaseConnection DBC = new DatabaseConnection();
 		Connection connect = DBC.openDBConnection();
 
 		//TO DO (SQL QUERY CODES GOES HERE)
+		String query = String.format("UPDATE album SET name = '%s' WHERE name = '%s'", albumName, originalName);
+
+		try {
+			PreparedStatement statement = connect.prepareStatement(query);
+			int res = 0;
+			res = statement.executeUpdate();
+
+			if (res == 0) throw new SQLException();
+			else System.out.println("Updated album name successfully.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		
 		DBC.closeDBConnection(connect);
 	}
 
-	protected void updateAlbumSongs(String numSongs){
-
-	}
-
-	protected void updateAlbumArtist(String artist){
-
-	}
-
-	protected void removeAlbum(String name) {
+	protected void updateAlbumSongs(String songName, int numSongs){
 		//SQL QUERIES NEEDS THESE OBJ
 		DatabaseConnection DBC = new DatabaseConnection();
 		Connection connect = DBC.openDBConnection();
 
 		//TO DO (SQL QUERY CODES GOES HERE)
-		
+		String query = String.format("UPDATE album SET num_Songs = '%d' WHERE name = '%s'", numSongs, songName);
+
+		try {
+			PreparedStatement statement = connect.prepareStatement(query);
+			int res = 0;
+			res = statement.executeUpdate();
+
+			if (res == 0) throw new SQLException();
+			else System.out.println("Updated number of songs successfully.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		DBC.closeDBConnection(connect);
 	}
 
+	protected void updateAlbumArtist(String songName, String artist){
+		//SQL QUERIES NEEDS THESE OBJ
+		DatabaseConnection DBC = new DatabaseConnection();
+		Connection connect = DBC.openDBConnection();
+
+		int artist_id = getArtistId(artist);
+
+		// TODO: Implement add artist here
+		if (artist_id == 0){
+			System.out.println("Artist not found.");
+			return;
+		}
+		//TO DO (SQL QUERY CODES GOES HERE)
+		String query = String.format("UPDATE album SET artist_id = '%d' WHERE songName = '%s'", artist_id, songName);
+		try {
+			PreparedStatement statement = connect.prepareStatement(query);
+			int res = 0;
+			res = statement.executeUpdate();
+
+			if (res == 0) throw new SQLException();
+			else System.out.println("Updated artist successfully.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		DBC.closeDBConnection(connect);
+	}
+
+	protected void removeAlbum(String name, String artist) {
+		//SQL QUERIES NEEDS THESE OBJ
+		DatabaseConnection DBC = new DatabaseConnection();
+		Connection connect = DBC.openDBConnection();
+
+		int artist_id = getArtistId(artist);
+
+
+		String query = String.format("DELETE FROM album WHERE name = '%s' AND artist_id = '%d'", name, artist_id);
+		//TO DO (SQL QUERY CODES GOES HERE)
+		try {
+			PreparedStatement statement = connect.prepareStatement(query);
+			int res = 0;
+			res = statement.executeUpdate();
+
+			if (res == 0) throw new SQLException();
+			else System.out.println("Removed album successfully.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		DBC.closeDBConnection(connect);
+	}
+
+	private int getArtistId(String artistName){
+
+		//SQL QUERIES NEEDS THESE OBJ
+		DatabaseConnection DBC = new DatabaseConnection();
+		Connection connect = DBC.openDBConnection();
+
+		String artistQuery = String.format("SELECT artist_id FROM artist WHERE artist.name = '%s'", artistName);
+		int artist_id = 0;
+		// get artist id from artist name
+		try{
+			PreparedStatement stmt = connect.prepareStatement(artistQuery);
+			ResultSet rs = stmt.executeQuery();
+
+			if (!rs.isBeforeFirst()){
+				System.out.println("No results found");
+			} else {
+				rs.next();
+				artist_id = rs.getInt(1);
+				rs.close();
+				stmt.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		DBC.closeDBConnection(connect);
+		return artist_id;
+	}
 	protected void displayAlbumData(ResultSet rs){
 		try {
 			// print query results
@@ -109,6 +225,8 @@ public class Album {
 					System.out.println(tuple);
 				}
 			}
+
+			rs.getStatement().close();
 		} catch (SQLException e){
 			System.out.println("Failed to finish query");
 		}
