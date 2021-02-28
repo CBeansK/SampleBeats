@@ -1,3 +1,5 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -100,6 +102,7 @@ public class MenuController {
 	}
 	
 	protected void albumMenu() {
+
 		Album album = new Album();
 		StringBuilder builder = new StringBuilder();
 
@@ -131,24 +134,89 @@ public class MenuController {
 				System.out.println("Please enter a valid number (0-5)");
 			}
 
-			if (choice == '1') {
-				album.getAlbumByName();
+			// reset buffer
+			input.nextLine();
+
+			try {
+				if (choice == '1') {
+					// get input
+					System.out.println("Please enter an album name:");
+					String name = input.nextLine();
+
+					// quick validation
+					if (name.length() < 1) throw new InputMismatchException();
+
+					album.displayAlbumData(album.getAlbumByName(name));
+					albumMenu();
+				} else if (choice == '2') {
+
+					// input
+					System.out.println("Please enter an artist's name:");
+					String artistName = input.nextLine();
+
+					// validation
+					if (artistName.length() < 1) throw new InputMismatchException();
+
+					// make query, display results
+					album.displayAlbumData(album.getAlbumByArtist(artistName));
+
+					albumMenu();
+				} else if (choice == '3') {
+
+					// get album name
+					System.out.println("Enter album name:");
+					String albumName = input.nextLine();
+					// get num_songs
+					System.out.println("Enter number of songs:");
+					String numSongs = input.nextLine();
+					// get artist
+					System.out.println("Enter the artist:");
+					String artistName = input.nextLine();
+					// assuming for now we are entering a valid artist
+					// if artist not found, offer to add artist
+					album.insertAlbum(albumName, numSongs, artistName);
+					albumMenu();
+				} else if (choice == '4') {
+
+					// get album to be altered
+					System.out.println("Enter the name of the album you want to alter:");
+					String title = input.nextLine();
+
+					try {
+						ResultSet rs = album.getAlbumByName(title);
+						if (!rs.isBeforeFirst()){
+							System.out.println("Song not found.");
+							albumMenu();
+						} else {
+							album.displayAlbumData(rs);
+							System.out.println("Enter new name for album or leave blank if no change");
+							String albumName = input.nextLine();
+							System.out.println("Enter new number of songs or leave blank if no change");
+							String numSongs = input.nextLine();
+							System.out.println("Enter new artist or leave blank if no change");
+							String artist = input.nextLine();
+							if (!albumName.trim().equals("")) album.updateAlbumName(albumName);
+							if (!numSongs.trim().equals("")) album.updateAlbumSongs(numSongs);
+							if (!artist.trim().equals("")) album.updateAlbumArtist(artist);
+							albumMenu();
+						}
+					} catch (SQLException e){
+						System.out.println("Error while trying to make query.");
+						e.printStackTrace();
+					}
+				} else if (choice == '5') {
+					System.out.println("Enter album name:");
+					String name = input.nextLine();
+					album.removeAlbum(name);
+					albumMenu();
+				} else if (choice == '0') {
+					mainMenu();
+				}
+			} catch (InputMismatchException e){
+				System.out.println("Invalid choice entered.");
 				albumMenu();
-			} else if (choice == '2') {
-				album.getAlbumByArtist();
-				albumMenu();
-			} else if (choice == '3') {
-				album.insertAlbum();
-				albumMenu();
-			} else if (choice == '4') {
-				album.updateAlbum();
-				albumMenu();
-			} else if (choice == '5') {
-				album.removeAlbum();
-				albumMenu();
-			} else if (choice == '0') {
-				mainMenu();
 			}
+
 		}
 	}
 	
