@@ -1,3 +1,5 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -59,7 +61,7 @@ public class MenuController {
 		.append("\nEnter a designed option: \n")
 		.append("1: Search for Artist Information\n")
 		.append("2: Add new Artist\n")
-		.append("3: Update an Artist's information\n")
+		.append("3: Update an Artist's Information\n")
 		.append("4: Remove an Artist\n")
 		.append("0: GO BACK");
 
@@ -81,20 +83,80 @@ public class MenuController {
 				System.out.println("Please enter a valid number (0-4)");
 			}
 
-			if (choice == '1') {
-				artist.getArtistInfoByName();
+			input.nextLine();
+
+			try {
+				if (choice == '1') {
+					//SELECT input
+					System.out.println("Please input an Artist's name:");
+					String name = input.nextLine();
+
+					if (name.length() < 1) throw new InputMismatchException();
+
+					artist.displayArtistData(artist.getArtistInfoByName(name));
+					artistMenu();
+				} else if (choice == '2') {
+					//INSERT input
+
+					//get artist name
+					System.out.println("Enter Artist name: ");
+					String artistName = input.nextLine();
+					//get artist's genre
+					System.out.println("Enter Artist's genre: ");
+					String genre = input.nextLine();
+
+					artist.insertArtist(artistName, genre);
+					artist.insertArtist(artistName, genre);
+					artistMenu();
+				} else if (choice == '3') {
+					//UPDATE input
+					System.out.println("Enter the name of the Artist you want to update: ");
+					String originalName = input.nextLine();
+
+					try {
+						ResultSet rs = artist.getArtistInfoByName(originalName);
+						if (!rs.isBeforeFirst()) {
+							//If result is not found return to Menu
+							System.out.println("Artist not found.");
+							artistMenu();
+						} else {
+							artist.displayArtistData(rs);
+
+							System.out.println("Enter updated name or leave blank if no change");
+							String artistName = input.nextLine();
+
+							System.out.println("Enter new genre or leave blank if no change");
+							String artistGenre = input.nextLine();
+
+							if (!artistName.trim().equals("")) artist.updateArtistName(originalName, artistName);
+							if (!artistGenre.trim().equals("")) artist.updateArtistGenre(originalName, artistGenre);
+							artistMenu();
+						}
+						rs.close();
+					} catch (SQLException e) {
+						System.out.println("Error while trying to make query.");
+						e.printStackTrace();
+					}
+				} else if (choice == '4') {
+					//DELETE input
+					System.out.println("Enter Artist name for data:");
+					String name = input.nextLine();
+
+					//Display search for clarity
+					artist.displayArtistData(artist.getArtistInfoByName(name));
+
+					//get name to ensure it doesn't delete other artists
+					System.out.println("Enter name of artist to DELETE:");
+					String artistName = input.nextLine();
+
+					artist.removeArtist(name, artistName);
+					artistMenu();
+				} else if (choice == '0') {
+					mainMenu();
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("Invalid choice entered.");
 				artistMenu();
-			} else if (choice == '2') {
-				artist.insertArtist();
-				artistMenu();
-			} else if (choice == '3') {
-				artist.updateArtist();
-				artistMenu();
-			} else if (choice == '4') {
-				artist.removeArtist();
-				artistMenu();
-			} else if (choice == '0') {
-				mainMenu();
 			}
 		}
 	}
