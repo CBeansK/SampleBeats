@@ -27,13 +27,6 @@ public class Artist {
 		DatabaseConnection DBC = new DatabaseConnection();
 		Connection connect = DBC.openDBConnection();
 
-		int artist_id = 0;
-
-		artist_id = getArtistId(name);
-		if(artist_id == 0){
-			System.out.println("Artist not found.");
-			return;
-		}
 
 		String query = String.format("INSERT INTO artist (name, genre) VALUES ('%s','%s')", name, genre);
 		try {
