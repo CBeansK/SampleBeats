@@ -83,7 +83,7 @@ public class Album {
 		DBC.closeDBConnection(connect);
 	}
 
-	protected void updateAlbumName(String originalName, String albumName) {
+	protected boolean updateAlbumName(String originalName, String albumName) {
 		//SQL QUERIES NEEDS THESE OBJ
 		DatabaseConnection DBC = new DatabaseConnection();
 		Connection connect = DBC.openDBConnection();
@@ -100,13 +100,15 @@ public class Album {
 			else System.out.println("Updated album name successfully.");
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 
 		
 		DBC.closeDBConnection(connect);
+		return true;
 	}
 
-	protected void updateAlbumSongs(String songName, int numSongs){
+	protected boolean updateAlbumSongs(String songName, int numSongs){
 		//SQL QUERIES NEEDS THESE OBJ
 		DatabaseConnection DBC = new DatabaseConnection();
 		Connection connect = DBC.openDBConnection();
@@ -123,9 +125,11 @@ public class Album {
 			else System.out.println("Updated number of songs successfully.");
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 
 		DBC.closeDBConnection(connect);
+		return true;
 	}
 
 	protected void updateAlbumArtist(String albumName, String artist){
