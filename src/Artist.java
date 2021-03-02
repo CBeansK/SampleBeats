@@ -9,7 +9,7 @@ public class Artist {
 		System.out.println("__________________________________________________________________");
 
 		//TO DO (SQL QUERY CODES GOES HERE)
-		String query = String.format("SELECT * FROM artist JOIN song ON artist.artist_id = song.artist_id WHERE artist.name = '%s'", name);
+		String query = String.format("SELECT * FROM artist WHERE name = '%s'", name);
 
 		try {
 			PreparedStatement stmt = connect.prepareStatement(query);
@@ -27,8 +27,14 @@ public class Artist {
 		DatabaseConnection DBC = new DatabaseConnection();
 		Connection connect = DBC.openDBConnection();
 
+		if (getArtistId(name) > 0){
+			System.out.println("Artist already exists in database.");
+			displayArtistData(getArtistInfoByName(name));
+			return;
+		}
 
 		String query = String.format("INSERT INTO artist (name, genre) VALUES ('%s','%s')", name, genre);
+
 		try {
 			PreparedStatement stmt = connect.prepareStatement(query);
 			int res = stmt.executeUpdate();

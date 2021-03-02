@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.Scanner;
+
 public class Album {
 	protected ResultSet getAlbumByName(String name) {
 		//SQL QUERIES NEEDS THESE OBJ
@@ -126,7 +128,7 @@ public class Album {
 		DBC.closeDBConnection(connect);
 	}
 
-	protected void updateAlbumArtist(String songName, String artist){
+	protected void updateAlbumArtist(String albumName, String artist){
 		//SQL QUERIES NEEDS THESE OBJ
 		DatabaseConnection DBC = new DatabaseConnection();
 		Connection connect = DBC.openDBConnection();
@@ -136,10 +138,38 @@ public class Album {
 		// TODO: Implement add artist here
 		if (artist_id == 0){
 			System.out.println("Artist not found.");
-			return;
+			System.out.println("Would you like to add the artist? (y/n)");
+
+			// bad for single threading I think ://
+			Scanner input = new Scanner(System.in);
+
+			boolean found = false;
+			while(!found){
+				String response = input.nextLine();
+				switch (response.toLowerCase()){
+					case "y":
+						System.out.println("Enter artist's genre:");
+						String genre = input.nextLine();
+						Artist artistClass = new Artist();
+						artistClass.insertArtist(artist, genre);
+						found = true;
+						break;
+					case "n":
+						System.out.println("Cancelling update.");
+						found = true;
+						return;
+					default:
+						System.out.println("Invalid response. Please enter (y/n)");
+
+				}
+			}
+
+			artist_id = getArtistId(artist);
+
+
 		}
 		//TO DO (SQL QUERY CODES GOES HERE)
-		String query = String.format("UPDATE album SET artist_id = '%d' WHERE songName = '%s'", artist_id, songName);
+		String query = String.format("UPDATE album SET artist_id = '%d' WHERE name = '%s'", artist_id, albumName);
 		try {
 			PreparedStatement statement = connect.prepareStatement(query);
 			int res = 0;

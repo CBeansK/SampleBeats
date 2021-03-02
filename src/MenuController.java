@@ -106,7 +106,6 @@ public class MenuController {
 					String genre = input.nextLine();
 
 					artist.insertArtist(artistName, genre);
-					artist.insertArtist(artistName, genre);
 					artistMenu();
 				} else if (choice == '3') {
 					//UPDATE input
@@ -267,8 +266,9 @@ public class MenuController {
 							String artist = input.nextLine();
 
 							// update data
-							if (!albumName.trim().equals("")) album.updateAlbumName(title, albumName);
-							if ((numSongs > 0)) album.updateAlbumSongs(title, numSongs);
+							boolean good = false;
+							if (!albumName.trim().equals("")) good =  album.updateAlbumName(title, albumName);
+							if ((numSongs > 0)) good =  album.updateAlbumSongs(title, numSongs);
 							if (!artist.trim().equals("")) album.updateAlbumArtist(title, artist);
 
 							// done
