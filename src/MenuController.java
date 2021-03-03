@@ -371,7 +371,7 @@ public class MenuController {
 		builder.append("\nWELCOME TO THE SAMPLE MENU\n")
 		.append("__________________________________________________________________")
 		.append("\nEnter a designed option: \n")
-		.append("1: Search for SAMPLES' INFOMATION by Sample's name\n")
+		.append("1: Search for SAMPLES' INFORMATION by Sample's name\n")
 		.append("2: Search for SAMPLE'S SONG'S NAME by Sample's name\n")
 		.append("3: Search for SAMPLE'S ALBUM (if one) by Sample's name\n")
 		.append("4: Search for SAMPLE'S ARTIST'S NAME by Sample's name\n")
@@ -421,7 +421,20 @@ public class MenuController {
 				sample.getSampleByArtist(artistName);
 				sampleMenu();
 			} else if (choice == '5') {
-				sample.insertSample();
+				//get sample description
+				System.out.println("Enter sample description:");
+				String description = input.nextLine();
+				//get songName
+				System.out.println("Enter song to add to sample:");
+				String songName = input.nextLine();
+				//get albumName
+				System.out.println("Enter album song is from:");
+				String albumName = input.nextLine();
+				//get artistName
+				System.out.println("Enter the artist:");
+				String artistName = input.nextLine();
+
+				sample.insertSample(description, songName, albumName, artistName);
 				sampleMenu();
 			} else if (choice == '6') {
 				// update sample name

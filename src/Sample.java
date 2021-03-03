@@ -175,10 +175,32 @@ public class Sample {
 		DBC.closeDBConnection(connect);
 	}
 
-	protected void insertSample() {
+	protected void insertSample(String description, String songName, String albumName, String artistName) {
 		//SQL QUERIES NEEDS THESE OBJ
 		DatabaseConnection DBC = new DatabaseConnection();
 		Connection connect = DBC.openDBConnection();
+
+		int song_id = 0;
+		int album_id = 0;
+		int artist_id = 0;
+
+		song_id = getSongId(songName);
+		album_id = getAlbumId(albumName);
+		artist_id = getArtistId(artistName);
+
+		String query = String.format("INSERT INTO sample (description, song_id, album_id, artist_id) VALUES ('%s', %d, %d, %d)", description, songName, albumName, artistName);
+
+		try {
+			PreparedStatement stmt = connect.prepareStatement(query);
+			int res = stmt.executeUpdate();
+
+			if(res == 0) throw new SQLException();
+			else System.out.println("Added new sample successfully.");
+
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 		//TO DO (SQL QUERY CODES GOES HERE)
 		
@@ -287,5 +309,92 @@ public class Sample {
 		} catch (SQLException e){
 			System.out.println("Failed to finish query");
 		}
+	}
+
+	private int getArtistId(String artistName){
+
+		//SQL QUERIES NEEDS THESE OBJ
+		DatabaseConnection DBC = new DatabaseConnection();
+		Connection connect = DBC.openDBConnection();
+
+		String artistQuery = String.format("SELECT artist_id FROM artist WHERE artist.name = '%s'", artistName);
+		int artist_id = 0;
+		// get artist id from artist name
+		try{
+			PreparedStatement stmt = connect.prepareStatement(artistQuery);
+			ResultSet rs = stmt.executeQuery();
+
+			if (!rs.isBeforeFirst()){
+				System.out.println("No results found");
+			} else {
+				rs.next();
+				artist_id = rs.getInt(1);
+				rs.close();
+				stmt.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		DBC.closeDBConnection(connect);
+		return artist_id;
+	}
+
+	private int getSongId(String songName){
+
+		//SQL QUERIES NEEDS THESE OBJ
+		DatabaseConnection DBC = new DatabaseConnection();
+		Connection connect = DBC.openDBConnection();
+
+		String songQuery = String.format("SELECT song_id FROM song WHERE song.name = '%s'", songName);
+		int song_id = 0;
+		// get song id from song name
+		try{
+			PreparedStatement stmt = connect.prepareStatement(songQuery);
+			ResultSet rs = stmt.executeQuery();
+
+			if (!rs.isBeforeFirst()){
+				System.out.println("No results found");
+			} else {
+				rs.next();
+				song_id = rs.getInt(1);
+				rs.close();
+				stmt.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		DBC.closeDBConnection(connect);
+		return song_id;
+	}
+
+	private int getAlbumId(String albumName){
+
+		//SQL QUERIES NEEDS THESE OBJ
+		DatabaseConnection DBC = new DatabaseConnection();
+		Connection connect = DBC.openDBConnection();
+
+		String albumQuery = String.format("SELECT album_id FROM album WHERE album.name = '%s'", albumName);
+		int album_id = 0;
+		// get album id from album name
+		try{
+			PreparedStatement stmt = connect.prepareStatement(albumQuery);
+			ResultSet rs = stmt.executeQuery();
+
+			if (!rs.isBeforeFirst()){
+				System.out.println("No results found");
+			} else {
+				rs.next();
+				album_id = rs.getInt(1);
+				rs.close();
+				stmt.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		DBC.closeDBConnection(connect);
+		return album_id;
 	}
 }
