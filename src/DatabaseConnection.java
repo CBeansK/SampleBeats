@@ -8,7 +8,7 @@ public class DatabaseConnection {
 			
 			//PLEASE USE YOUR URL HERE, YOUR USER, YOU PASSWORD
 			//TODO: Change pw back when committing
-			connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_beats", "root", "rootSER322HW");
+			connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample_beats", "root", "pw");
         } catch (Exception error) {
 			System.out.println("FAILED TO CONNECT TO SERVER");
 			System.out.println("ENSURE SERVER IS RUNNING AND CONFIGURATION IS CORRECT");
