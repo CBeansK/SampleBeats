@@ -127,16 +127,17 @@ public class User {
 	protected void updateUser() {
 		String[] currentUser = Main.getUser();
 		System.out.println("\nWant to update your user information?");
-		System.out.println("Current User Information: "
+		System.out.println("\nCurrent User Information: "
 				+ "\nUsername: " + currentUser[0]
 				+ "\nFullname: " + currentUser[1]
 				+ "\nPassword: " + currentUser[2]);
 		
-		System.out.print("__________________________________________________________________"
+		System.out.println("__________________________________________________________________"
 				+ "\nEnter a designed option: "
 				+ "\n1: Username"
 				+ "\n2: Fullname"
-				+ "\n3: Password");
+				+ "\n3: Password"
+				+ "\n0: GO BACK");
 		
 		Scanner input = new Scanner(System.in);
 		char choice = 0;
@@ -148,36 +149,36 @@ public class User {
 		
 		while (!choiceFound) {
 			try {
-				String in = input.next();
+				String in = input.nextLine();
 				if (in.length() > 1)
 					throw new InputMismatchException();
 				choice = in.charAt(0);
-				if (choice < '1' || choice > '3')
+				if (choice < '0' || choice > '3')
 					throw new InputMismatchException();
 				choiceFound = true;
 			} catch (InputMismatchException e) {
-				System.out.println("Please enter a valid number (1-3)");
+				System.out.println("Please enter a valid number (0-3)");
 			}
 
 			if (choice == '1') {
 				System.out.println("Please enter your new username: ");
-				username = input.next();
+				username = input.nextLine();
 				query = "INSERT INTO user (username) "
 				      + "VALUES('" + username + "');";
 				
 			} else if (choice == '2') {
 				System.out.println("Please enter your new fullname: ");
-				fullname = input.next();
+				fullname = input.nextLine();
 				query = "INSERT INTO user (fullname) "
 					      + "VALUES('" + fullname + "');";
 				
 			} else if (choice == '3') {
 				System.out.println("Please enter your new password: ");
-				password = input.next();
+				password = input.nextLine();
 				query = "INSERT INTO user (password) "
 					  + "VALUES('" + password + "');";
 			} else if (choice == '0') {
-				break;
+				return;
 			}
 		}
 		
@@ -229,10 +230,10 @@ public class User {
 				+ "\nFullname: " + currentUser[1]
 				+ "\nPassword: " + currentUser[2]);
 		
-		System.out.print("__________________________________________________________________"
+		System.out.println("__________________________________________________________________"
 				+ "\nEnter a designed option: "
 				+ "\n1: Yes"
-				+ "\n2: No");
+				+ "\n0: No");
 		
 		boolean success = false;
 		Scanner input = new Scanner(System.in);
@@ -241,15 +242,15 @@ public class User {
 		
 		while (!choiceFound) {
 			try {
-				String in = input.next();
+				String in = input.nextLine();
 				if (in.length() > 1)
 					throw new InputMismatchException();
 				choice = in.charAt(0);
-				if (choice < '1' || choice > '2')
+				if (choice < '0' || choice > '1')
 					throw new InputMismatchException();
 				choiceFound = true;
 			} catch (InputMismatchException e) {
-				System.out.println("Please enter a valid number (1-2)");
+				System.out.println("Please enter a valid number (0-1)");
 			}
 
 			if (choice == '1') {
@@ -286,11 +287,55 @@ public class User {
 		            }
 				}
 				DBC.closeDBConnection(connect);
-			} else if (choice == '2') {
+			} else if (choice == '0') {
 				success = false;
 				break;
 			}
 		}
 		return success;
+	}
+
+	public boolean checkExistingUsers(String username) {
+		DatabaseConnection DBC = new DatabaseConnection();
+		Connection connect = DBC.openDBConnection();
+		
+		ResultSet result = null;
+		Statement state = null;
+		String query = "SELECT username"
+					 + "FROM user "
+					 + "WHERE username = '" + username + "';";
+		boolean found = false;
+				
+		try {
+			state = connect.createStatement();
+			result = state.executeQuery(query);
+			
+			if(!result.isBeforeFirst()) {
+				found = false;
+			} else {
+				while(result.next()) {
+					if (username.equals(result.getString("username"))) {
+						found = true;
+					} else {
+						found = false;
+					}
+				}
+			}
+		} catch (Exception error) {
+			error.printStackTrace();
+		} finally {
+			try {
+                if (result != null) {
+                	result.close();
+                }
+                if (state != null) {
+                	state.close();
+                }
+            } catch (Exception error) {
+                error.printStackTrace();
+            }
+		}
+		DBC.closeDBConnection(connect);
+		return found;
 	}
 }
