@@ -371,10 +371,10 @@ public class MenuController {
 		builder.append("\nWELCOME TO THE SAMPLE MENU\n")
 		.append("__________________________________________________________________")
 		.append("\nEnter a designed option: \n")
-		.append("1: Search for SAMPLES' INFOMATION by Sample's description\n")
-		.append("2: Search for SAMPLE'S SONG'S NAME by Sample's description\n")
-		.append("3: Search for SAMPLE'S ALBUM (if one) by Sample's description\n")
-		.append("4: Search for SAMPLE'S ARTIST'S NAME by Sample's description\n")
+		.append("1: Search for SAMPLES' INFOMATION by Sample's name\n")
+		.append("2: Search for SAMPLE'S SONG'S NAME by Sample's name\n")
+		.append("3: Search for SAMPLE'S ALBUM (if one) by Sample's name\n")
+		.append("4: Search for SAMPLE'S ARTIST'S NAME by Sample's name\n")
 		.append("5: Add new Sample\n")
 		.append("6: Update an Sample's information\n")
 		.append("7: Remove an Sample\n")
@@ -398,8 +398,12 @@ public class MenuController {
 				System.out.println("Please enter a valid number (0-7)");
 			}
 
+			input.nextLine();
+
 			if (choice == '1') {
-				sample.getSampleByDescription();
+				System.out.println("Enter a song:");
+				String songName = input.nextLine();
+				sample.printSampleData(sample.getSampleByDescription(songName));
 				sampleMenu();
 			} else if (choice == '2') {
 				sample.getSampleBySong();
