@@ -401,18 +401,24 @@ public class MenuController {
 			input.nextLine();
 
 			if (choice == '1') {
-				System.out.println("Enter a song:");
+				System.out.println("Enter a Sample Description:");
 				String songName = input.nextLine();
 				sample.printSampleData(sample.getSampleByDescription(songName));
 				sampleMenu();
 			} else if (choice == '2') {
-				sample.getSampleBySong();
+				System.out.println("Enter a Song Name:");
+				String songName = input.nextLine();
+				sample.getSampleBySong(songName);
 				sampleMenu();
 			} else if (choice == '3') {
-				sample.getSampleByAlbum();
+				System.out.println("Enter a Album Name:");
+				String albumName = input.nextLine();
+				sample.getSampleByAlbum(albumName);
 				sampleMenu();
 			} else if (choice == '4') {
-				sample.getSampleByArtist();
+				System.out.println("Enter a Artist Name:");
+				String artistName = input.nextLine();
+				sample.getSampleByArtist(artistName);
 				sampleMenu();
 			} else if (choice == '5') {
 				sample.insertSample();

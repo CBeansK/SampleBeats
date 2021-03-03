@@ -22,32 +22,155 @@ public class Sample {
 		return null;
 	}
 
-	protected void getSampleBySong() {
+	protected void getSampleBySong(String songName) {
 		//SQL QUERIES NEEDS THESE OBJ
 		DatabaseConnection DBC = new DatabaseConnection();
 		Connection connect = DBC.openDBConnection();
-
-		//TO DO (SQL QUERY CODES GOES HERE)
+		
+		ResultSet result = null;
+		Statement state = null;
+		String query = String.format("SELECT sample.description, song.title, artist.name AS artist, album.name AS album\n" +
+				"FROM ((song JOIN album) JOIN artist) JOIN sample\n" +
+				"    ON sample.song_id = song.song_id AND\n" +
+				"    sample.album_id = album.album_id AND\n" +
+				"    sample.artist_id = artist.artist_id WHERE song.title = '%s'", songName);
+				
+		try {
+            state = connect.createStatement();
+            result = state.executeQuery(query);
+			
+			if(!result.isBeforeFirst()) {
+				System.out.println("\nThere is no SAMPLE by that SONG NAME.");
+				System.out.println("Returning to SAMPLE menu\n");
+			} else {
+				System.out.printf("\nSAMPLE DESCRIPTION            SONG NAME                     ARTIST NAME                   ALBUM NAME                    \n"
+		                + "__________________________________________________________________________________________________________________________________\n");
+        
+				while (result.next()) {
+						System.out.printf(" %-29s %-29s %-29s %-29s%n",
+	                    		result.getString("description"),
+	                    		result.getString("title"),
+	                    		result.getString("artist"),
+	                    		result.getString("album"));
+				}
+				System.out.println("\n");
+			}
+		} catch (Exception error) {
+			error.printStackTrace();
+		} finally {
+			try {
+                if (result != null) {
+                	result.close();
+                }
+                if (state != null) {
+                	state.close();
+                }
+            } catch (Exception error) {
+                error.printStackTrace();
+            }
+		}
 		
 		DBC.closeDBConnection(connect);
 	}
 
-	protected void getSampleByAlbum() {
+	protected void getSampleByAlbum(String albumName) {
 		//SQL QUERIES NEEDS THESE OBJ
 		DatabaseConnection DBC = new DatabaseConnection();
 		Connection connect = DBC.openDBConnection();
-
-		//TO DO (SQL QUERY CODES GOES HERE)
+		
+		ResultSet result = null;
+		Statement state = null;
+		String query = String.format("SELECT sample.description, song.title, artist.name AS artist, album.name AS album\n" +
+				"FROM ((song JOIN album) JOIN artist) JOIN sample\n" +
+				"    ON sample.song_id = song.song_id AND\n" +
+				"    sample.album_id = album.album_id AND\n" +
+				"    sample.artist_id = artist.artist_id WHERE album.name = '%s'", albumName);
+				
+		try {
+            state = connect.createStatement();
+            result = state.executeQuery(query);
+			
+			if(!result.isBeforeFirst()) {
+				System.out.println("\nThere is no SAMPLE by that ALBUM NAME.");
+				System.out.println("Returning to SAMPLE menu\n");
+			} else {
+				System.out.printf("\nSAMPLE DESCRIPTION            SONG NAME                     ARTIST NAME                   ALBUM NAME                    \n"
+		                + "__________________________________________________________________________________________________________________________________\n");
+        
+				while (result.next()) {
+						System.out.printf(" %-29s %-29s %-29s %-29s%n",
+	                    		result.getString("description"),
+	                    		result.getString("title"),
+	                    		result.getString("artist"),
+	                    		result.getString("album"));
+				}
+				System.out.println("\n");
+			}
+		} catch (Exception error) {
+			error.printStackTrace();
+		} finally {
+			try {
+                if (result != null) {
+                	result.close();
+                }
+                if (state != null) {
+                	state.close();
+                }
+            } catch (Exception error) {
+                error.printStackTrace();
+            }
+		}
 		
 		DBC.closeDBConnection(connect);
 	}
-
-	protected void getSampleByArtist() {
+	
+	protected void getSampleByArtist(String artistName) {
 		//SQL QUERIES NEEDS THESE OBJ
 		DatabaseConnection DBC = new DatabaseConnection();
 		Connection connect = DBC.openDBConnection();
-
-		//TO DO (SQL QUERY CODES GOES HERE)
+		
+		ResultSet result = null;
+		Statement state = null;
+		String query = String.format("SELECT sample.description, song.title, artist.name AS artist, album.name AS album\n" +
+				"FROM ((song JOIN album) JOIN artist) JOIN sample\n" +
+				"    ON sample.song_id = song.song_id AND\n" +
+				"    sample.album_id = album.album_id AND\n" +
+				"    sample.artist_id = artist.artist_id WHERE artist.name = '%s'", artistName);
+				
+		try {
+            state = connect.createStatement();
+            result = state.executeQuery(query);
+			
+			if(!result.isBeforeFirst()) {
+				System.out.println("\nThere is no SAMPLE by that ALBUM NAME.");
+				System.out.println("Returning to SAMPLE menu\n");
+			} else {
+				System.out.printf("\nSAMPLE DESCRIPTION            SONG NAME                     ARTIST NAME                   ALBUM NAME                    \n"
+		                + "__________________________________________________________________________________________________________________________________\n");
+        
+				while (result.next()) {
+						System.out.printf(" %-29s %-29s %-29s %-29s%n",
+	                    		result.getString("description"),
+	                    		result.getString("title"),
+	                    		result.getString("artist"),
+	                    		result.getString("album"));
+				}
+				System.out.println("\n");
+			}
+		} catch (Exception error) {
+			error.printStackTrace();
+		} finally {
+			try {
+                if (result != null) {
+                	result.close();
+                }
+                if (state != null) {
+                	state.close();
+                }
+            } catch (Exception error) {
+                error.printStackTrace();
+            }
+		}
 		
 		DBC.closeDBConnection(connect);
 	}
