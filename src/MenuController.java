@@ -22,7 +22,7 @@ public class MenuController {
 		boolean choiceFound = false;
 		while (!choiceFound) {
 			try {
-				String in = input.next();
+				String in = input.nextLine();
 				if (in.length() > 1)
 					throw new InputMismatchException();
 				choice = in.charAt(0);
@@ -70,7 +70,7 @@ public class MenuController {
 		boolean choiceFound = false;
 		while (!choiceFound) {
 			try {
-				String in = input.next();
+				String in = input.nextLine();
 				if (in.length() > 1)
 					throw new InputMismatchException();
 				choice = in.charAt(0);
@@ -120,7 +120,7 @@ public class MenuController {
 		boolean choiceFound = false;
 		while (!choiceFound) {
 			try {
-				String in = input.next();
+				String in = input.nextLine();
 				if (in.length() > 1)
 					throw new InputMismatchException();
 				choice = in.charAt(0);
@@ -174,7 +174,7 @@ public class MenuController {
 		boolean choiceFound = false;
 		while (!choiceFound) {
 			try {
-				String in = input.next();
+				String in = input.nextLine();
 				if (in.length() > 1)
 					throw new InputMismatchException();
 				choice = in.charAt(0);
@@ -232,7 +232,7 @@ public class MenuController {
 		boolean choiceFound = false;
 		while (!choiceFound) {
 			try {
-				String in = input.next();
+				String in = input.nextLine();
 				if (in.length() > 1)
 					throw new InputMismatchException();
 				choice = in.charAt(0);
@@ -288,7 +288,7 @@ public class MenuController {
 		boolean choiceFound = false;
 		while (!choiceFound) {
 			try {
-				String in = input.next();
+				String in = input.nextLine();
 				if (in.length() > 1)
 					throw new InputMismatchException();
 				choice = in.charAt(0);
