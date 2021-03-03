@@ -424,10 +424,23 @@ public class MenuController {
 				sample.insertSample();
 				sampleMenu();
 			} else if (choice == '6') {
-				sample.updateSample();
+				// update sample name
+				System.out.println("Enter the description of the sample you want to edit");
+				String og = input.nextLine();
+				sample.printSampleData(sample.getSampleByDescription(og));
+				System.out.println("Enter new description for sample or leave blank if no change");
+				String desc = input.nextLine();
+				System.out.println("Enter the original song for the sample or blank if no change");
+				String ogSongName = input.nextLine();
+
+				if (!desc.equals(""))sample.updateSampleName(og, desc);
+				if (!ogSongName.equals(""))sample.updateSampleSong(og, ogSongName);
+				// update original song
 				sampleMenu();
 			} else if (choice == '7') {
-				sample.removeSample();
+				System.out.println("Enter the description of the sample you want to delete");
+				String desc = input.nextLine();
+				sample.removeSample(desc);
 				sampleMenu();
 			} else if (choice == '0') {
 				mainMenu();

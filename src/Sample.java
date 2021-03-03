@@ -185,22 +185,80 @@ public class Sample {
 		DBC.closeDBConnection(connect);
 	}
 
-	protected void updateSample() {
+	protected void updateSampleName(String ogDesc, String desc) {
 		//SQL QUERIES NEEDS THESE OBJ
 		DatabaseConnection DBC = new DatabaseConnection();
 		Connection connect = DBC.openDBConnection();
 
 		//TO DO (SQL QUERY CODES GOES HERE)
+		String query = String.format("UPDATE sample SET description = '%s' WHERE description = '%s'", desc, ogDesc);
+
+		try {
+			PreparedStatement statement = connect.prepareStatement(query);
+			int res = 0;
+			res = statement.executeUpdate();
+
+			if (res == 0) throw new SQLException();
+			else System.out.println("Updated sample name successfully.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		
 		DBC.closeDBConnection(connect);
 	}
 
-	protected void removeSample() {
+	protected void updateSampleSong(String originalName, String newOriginal) {
+		//SQL QUERIES NEEDS THESE OBJ
+		DatabaseConnection DBC = new DatabaseConnection();
+		Connection connect = DBC.openDBConnection();
+
+		int song_id = 0;
+		try {
+			String q = "SELECT song_id FROM song WHERE name = " + originalName;
+			song_id = connect.prepareStatement(q).executeQuery().getInt(1);
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+
+		if (song_id == 0){
+			System.out.println("Original song not found.");
+		}
+		//TO DO (SQL QUERY CODES GOES HERE)
+		String query = String.format("UPDATE sample SET song_id = %d WHERE description = '%s'", song_id, originalName);
+
+		try {
+			PreparedStatement statement = connect.prepareStatement(query);
+			int res = 0;
+			res = statement.executeUpdate();
+
+			if (res == 0) throw new SQLException();
+			else System.out.println("Removed album successfully.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		DBC.closeDBConnection(connect);
+	}
+
+	protected void removeSample(String desc) {
 		//SQL QUERIES NEEDS THESE OBJ
 		DatabaseConnection DBC = new DatabaseConnection();
 		Connection connect = DBC.openDBConnection();
 
 		//TO DO (SQL QUERY CODES GOES HERE)
+		String query = String.format("DELETE FROM sample WHERE description = '%s'", desc);
+
+		try {
+			PreparedStatement statement = connect.prepareStatement(query);
+			int res = 0;
+			res = statement.executeUpdate();
+
+			if (res == 0) throw new SQLException();
+			else System.out.println("Removed sample successfully.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		DBC.closeDBConnection(connect);
 	}
