@@ -188,7 +188,7 @@ public class Sample {
 		album_id = getAlbumId(albumName);
 		artist_id = getArtistId(artistName);
 
-		String query = String.format("INSERT INTO sample (description, song_id, album_id, artist_id) VALUES ('%s', %d, %d, %d)", description, songName, albumName, artistName);
+		String query = String.format("INSERT INTO sample (description, song_id, album_id, artist_id) VALUES ('%s', %d, %d, %d)", description, song_id, album_id, artist_id);
 
 		try {
 			PreparedStatement stmt = connect.prepareStatement(query);
@@ -346,7 +346,7 @@ public class Sample {
 		DatabaseConnection DBC = new DatabaseConnection();
 		Connection connect = DBC.openDBConnection();
 
-		String songQuery = String.format("SELECT song_id FROM song WHERE song.name = '%s'", songName);
+		String songQuery = String.format("SELECT song_id FROM song WHERE song.title = '%s'", songName);
 		int song_id = 0;
 		// get song id from song name
 		try{
