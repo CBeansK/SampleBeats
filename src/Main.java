@@ -70,7 +70,7 @@ public class Main {
 
 		builder.append("\nWELCOME TO SAMPLE BEATS\n")
 				.append("1: Login\n")
-				.append("2: Look up User\n")
+				.append("2: Recover User's password\n")
 				.append("3: Add a User\n")
 				.append("0: CLOSE SAMPLE BEATS\n");
 
@@ -101,13 +101,8 @@ public class Main {
 		
 		String username = input.next();
 
-		System.out.println("\nNext, please enter your first name:");
-		String firstname = input.next();
-		
-		System.out.println("\nNext, please enter your last name:");
-		String lastname = input.next();
-		
-		String fullname = firstname + " " + lastname;
+		System.out.println("\nNext, please enter your full name:");
+		String fullname = input.nextLine();
 		
 		System.out.println("\nUsername entered was: " + username + " "
 						 + "\nFullname entered was: " + fullname);
@@ -118,12 +113,14 @@ public class Main {
 		Scanner input = new Scanner(System.in);
 		System.out.println("To add a new we will need you to enter in a Username, fullname, and a password");
 		System.out.println("\nEnter your username: ");
-		String username = input.next();
-		System.out.println("\nEnter your first name: ");
-		String firstname = input.next();
-		System.out.println("\nEnter your last name: ");
-		String lastname = input.next();
-		String fullname = firstname + " " + lastname;
+		
+		String username;
+		do {
+			username = input.next();
+		} while(user.checkExistingUsers(username));
+		
+		System.out.println("\nEnter your fullname name: ");
+		String fullname = input.nextLine();
 		System.out.println("\nEnter your password: ");
 		String password = input.next();
 		
